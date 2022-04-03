@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button, TextField } from '@mui/material';
-import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import './validacoes/commentary';
 import './validacoes/number';
 import './validacoes/reservedWord';
@@ -25,7 +25,7 @@ function App() {
   const [tokenRows, setTokenRows] = useState<any>();
   const [invalidRows, setInvalidRows] = useState<any>();
   const [symbolsRows, setSymbolsRows] = useState<any>();
-
+  const [showTable, setShowTable] = useState(false);
 
   const fileReader = (event: any) => {
     const input = event.target;
@@ -33,7 +33,7 @@ function App() {
     reader.onload = function () {
       const allReadText = reader.result;
       let allText: any = document.getElementById('text')
-      debugger
+
       if (allText) {
         setAllText(allText)
         allText.value = allReadText ? allReadText : '';
@@ -44,7 +44,7 @@ function App() {
 
   const handleChange = (event: any) => {
     const input = event.target;
-    debugger
+
     setTokenRows([])
     setInvalidRows([])
     setSymbolsRows([])
@@ -56,7 +56,7 @@ function App() {
   //caso contrário, retorna false
   const checkRepeated = (word: any, validatedArray: any[]) => {
     for (let index = 0; index < validatedArray.length; index++) {
-      if (!!validatedArray && (validatedArray[index].symbol == word)) {
+      if (!!validatedArray && (validatedArray[index].symbol === word)) {
         return validatedArray[index];
       }
     }
@@ -72,7 +72,7 @@ function App() {
   //Função responsável por verificar o texto linha a linha, 
   //separando-o em 3 objetos: um de tokens válidos, um de erros e um com os símbolos únicos
   function analizerText() {
-    debugger
+
     const allLineSplited = splitLine(allText.value);
     const allValidated = [{}];
     const allUnvalidated = [{}];
@@ -166,7 +166,7 @@ function App() {
     let row: {}
     let rows: any[] = []
     if (allUnvalidated && allUnvalidated.length > 0) {
-      debugger;
+      ;
       allUnvalidated.map((word: any, index: number) => {
         if (index > 0) {
           row = { id: word.line, symbol: word.symbol }
@@ -191,7 +191,7 @@ function App() {
     let row: {}
     let rows: any[] = []
     if (allSymbols && allSymbols.length > 0) {
-      debugger;
+      ;
       allSymbols.map((word: any, index: number) => {
         if (index > 0) {
           row = { id: index, symbol: word }
@@ -228,10 +228,6 @@ function App() {
 
   //Função que limpa a textarea e esconder as tabelas
   const removeText = () => {
-    debugger;
-    console.log('todas validas->', allValidated)
-    console.log('todas ivvalidas->', allUnvalidated)
-    console.log('todas simbols->', allSymbols)
     let allText: any = document.getElementById('text')
     if (allText) {
       setAllText('')
@@ -253,16 +249,16 @@ function App() {
   return (
     <div className="App">
       <header className='App-header' style={{ display: 'flex', justifyContent: 'center' }} >
-        <h1>Nosso analisador léxico em React</h1>
-        <img width="50" src={logo} className="App-logo" alt="logo" />
+        <h1> Analisador léxico com React</h1>
+        <h3> Eduardo Solka e Jader Silva</h3>
       </header>
-      <body style={{ backgroundColor: '#FaFaFa' }}>
+      <body style={{ backgroundColor: '#FAFAFA' }}>
         <div className="container">
           <h4>Insira seu documento de texto</h4>
           <input style={{ marginBottom: '20px' }} type="file" id="file" accept='text/plain' onChange={(event) => fileReader(event)} />
           <div className="container-textarea">
             <TextField
-            onChange={(event) =>{handleChange(event)}}
+              onChange={(event) => { handleChange(event) }}
               id="text"
               multiline
               rows={10}
@@ -272,21 +268,22 @@ function App() {
 
           <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
             <Button
-              onClick={() => { analizerText() }}
+              onClick={() => { setShowTable(true); analizerText() }}
               style={{ margin: '20px' }}
               variant="contained">Analisar</Button>
             <Button
-              onClick={() => { removeText() }}
+              onClick={() => { setShowTable(false); removeText() }}
               style={{ margin: '20px' }}
               variant="contained">Apagar</Button>
           </div>
-          {tokenRows && tokenRows.length > 0 && invalidRows && invalidRows.length > 0 && symbolsRows && symbolsRows.length > 0 &&
+          {showTable &&
             <div style={{ height: 1000, width: '100%', display: 'flex', justifyContent: 'center' }}>
               {tokenRows && tokenRows.length > 0 &&
                 <div style={{ height: 1000, width: '33%', justifyContent: 'center' }}>
                   <span>Tokens de entrada</span>
                   <DataGrid
                     disableColumnMenu
+                    disableColumnFilter
                     rows={tokenRows}
                     columns={tokenColumns}
                     pageSize={tokenRows.length}
@@ -298,6 +295,8 @@ function App() {
                   <span>Erros nas linhas</span>
 
                   <DataGrid
+                    disableColumnMenu
+                    disableColumnFilter
                     rows={invalidRows}
                     columns={invalidColumns}
                     pageSize={invalidRows.length}
@@ -308,6 +307,8 @@ function App() {
                 <div style={{ height: 1000, width: '33%', justifyContent: 'center' }}>
                   <span>Tabela de símbolos</span>
                   <DataGrid
+                    disableColumnMenu
+                    disableColumnFilter
                     rows={symbolsRows}
                     columns={symbolsColumns}
                     pageSize={symbolsRows.length}
