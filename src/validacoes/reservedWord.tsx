@@ -15,7 +15,7 @@ export default class ReservedWord {
     //caso contrário, retorna false.
     handleReservedWord(word: string, count: number) {
         if (this.isReservedWord(word)) {
-            return ({ token: word.toUpperCase(), symbol: word, id: count, errors: [] })
+            return ({ token: word.toUpperCase(), symbol: word, line: count, errors: [] })
         }
         return false
     }

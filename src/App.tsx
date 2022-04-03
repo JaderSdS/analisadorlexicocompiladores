@@ -26,7 +26,6 @@ function App() {
   const [tokenRows, setTokenRows] = useState<any>();
   const [invalidRows, setInvalidRows] = useState<any>();
   const [symbolsRows, setSymbolsRows] = useState<any>();
-  const [showTextArea, setShowTextArea] = useState<boolean>(true);
 
 
   const fileReader = (event: any) => {
@@ -35,12 +34,22 @@ function App() {
     reader.onload = function () {
       const allReadText = reader.result;
       let allText: any = document.getElementById('text')
+      debugger
       if (allText) {
         setAllText(allText)
         allText.value = allReadText ? allReadText : '';
       }
     };
     reader.readAsText(input.files[0]);
+  }
+
+  const handleChange = (event: any) => {
+    const input = event.target;
+    debugger
+    setTokenRows([])
+    setInvalidRows([])
+    setSymbolsRows([])
+    setAllText(input)
   }
 
   //Recebe uma palavra e a array com as palavras já validadas. 
@@ -64,7 +73,7 @@ function App() {
   //Função responsável por verificar o texto linha a linha, 
   //separando-o em 3 objetos: um de tokens válidos, um de erros e um com os símbolos únicos
   function analizerText() {
-    setShowTextArea(false)
+    debugger
     const allLineSplited = splitLine(allText.value);
     const allValidated = [{}];
     const allUnvalidated = [{}];
@@ -139,7 +148,7 @@ function App() {
     let rows: any[] = []
     if (allValidated && allValidated.length > 0) {
       allValidated.map((word: any, index: number) => {
-        row = { id: word.id, token: word.token, symbol: word.symbol }
+        row = { id: word.line, token: word.token, symbol: word.symbol }
         if (index > 0)
           rows.push(row)
       })
@@ -161,7 +170,7 @@ function App() {
       debugger;
       allUnvalidated.map((word: any, index: number) => {
         if (index > 0) {
-          row = { id: word.id, symbol: word.token, error: word.errors[0].description }
+          row = { id: word.line, symbol: word.symbol }
           rows.push(row)
         }
       })
@@ -199,8 +208,8 @@ function App() {
   //colunas da tabala de tokens
   const tokenColumns: GridColDef[] = [
     { field: 'id', headerName: 'Linha', width: 70 },
-    { field: 'token', headerName: 'Token', width: 130 },
-    { field: 'symbol', headerName: 'Símbolo', width: 200 },
+    { field: 'token', headerName: 'Token', width: 200 },
+    { field: 'symbol', headerName: 'Símbolo', width: 130 },
   ];
 
 
@@ -208,7 +217,6 @@ function App() {
   const invalidColumns: GridColDef[] = [
     { field: 'id', headerName: 'Linha', width: 70 },
     { field: 'symbol', headerName: 'Simbolo', width: 130 },
-    { field: 'error', headerName: 'Erro', width: 200 },
   ];
 
 
@@ -234,7 +242,6 @@ function App() {
     if (file) {
       file.value = '';
     }
-    setShowTextArea(true)
     setTokenRows([])
     setInvalidRows([])
     setSymbolsRows([])
@@ -256,6 +263,7 @@ function App() {
           <input style={{ marginBottom: '20px' }} type="file" id="file" accept='text/plain' onChange={(event) => fileReader(event)} />
           <div className="container-textarea">
             <TextField
+            onChange={(event) =>{handleChange(event)}}
               id="text"
               multiline
               rows={10}
@@ -274,10 +282,10 @@ function App() {
               variant="contained">Apagar</Button>
           </div>
           {tokenRows && tokenRows.length > 0 && invalidRows && invalidRows.length > 0 && symbolsRows && symbolsRows.length > 0 &&
-            <div style={{ height: 400, width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ height: 1000, width: '100%', display: 'flex', justifyContent: 'center' }}>
               {tokenRows && tokenRows.length > 0 &&
-                <div style={{ height: 400, width: '33%', justifyContent: 'center' }}>
-                  <span>Tabela de token</span>
+                <div style={{ height: 1000, width: '33%', justifyContent: 'center' }}>
+                  <span>Tokens de entrada</span>
                   <DataGrid
                     disableColumnMenu
                     rows={tokenRows}
@@ -287,8 +295,8 @@ function App() {
                 </div>
               }
               {invalidRows && invalidRows.length > 0 &&
-                <div style={{ height: 400, width: '33%', justifyContent: 'center' }}>
-                  <span>Tabela de inválidos</span>
+                <div style={{ height: 1000, width: '33%', justifyContent: 'center' }}>
+                  <span>Erros nas linhas</span>
 
                   <DataGrid
                     rows={invalidRows}
@@ -298,7 +306,7 @@ function App() {
                 </div>
               }
               {symbolsRows && symbolsRows.length > 0 &&
-                <div style={{ height: 400, width: '33%', justifyContent: 'center' }}>
+                <div style={{ height: 1000, width: '33%', justifyContent: 'center' }}>
                   <span>Tabela de símbolos</span>
                   <DataGrid
                     rows={symbolsRows}

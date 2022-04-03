@@ -32,7 +32,7 @@ export default class Numbers {
     //Recebe um númerom a contagem de linhas e a contagem de símbolos como atributo.
     //Retorna o token de número inteiro.
     handleIntNumber(number: any, count: any, symbolCount: string) {
-        return ({ token: 'NÚMERO INTEIRO [' + symbolCount + ']', symbol: number, id: count, errors: [] })
+        return ({ token: 'NÚMERO INTEIRO [' + symbolCount + ']', symbol: number, line: count, errors: [] })
     }
 
     //Recebe um número e a contagem de linhas
@@ -40,7 +40,7 @@ export default class Numbers {
     handleNotIntNumber(number: any, count: any) {
         return ({
             symbol: number,
-            id: count,
+            line: count,
             errors: [{ error: number, description: 'Int inválido' }]
         })
     }
@@ -48,7 +48,7 @@ export default class Numbers {
     //Recebe um númerom a contagem de linhas e a contagem de símbolos como atributo.
     //Retorna o token de número real.
     handleRealNumber(number: any, count: any, symbolCount: string) {
-        return ({ token: 'NÚMERO REAL [' + symbolCount + ']', symbol: number, id: count, errors: [] })
+        return ({ token: 'NÚMERO REAL [' + symbolCount + ']', symbol: number, line: count, errors: [] })
     }
 
     //Recebe um número e a contagem de linhas
@@ -57,7 +57,7 @@ export default class Numbers {
         return ({
             //token: 'REAL ' + countInvalid,
             symbol: number,
-            id: count,
+            line: count,
             errors: [{ error: number, description: 'Real inválido' }]
         })
     }

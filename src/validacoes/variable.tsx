@@ -14,12 +14,13 @@ export default class Variables {
     //Recebe uma palavra como atributo.
     //Caso a palavra contenha algum caracter especial, retorna true
     //Caso contrário, retorna false
+
+    //Expressão regular que verifica se é caracter não é especial
+    regex = /[a-zA-Z0-9]/
+
     isSpecialCharacters(characters: string | any[]) {
         for (let index = 0; index < characters.length; index++) {
-            if (characters[index] == '!' || characters[index] == '@' || characters[index] == '#' || characters[index] == '$' || characters[index] == '%'
-                || characters[index] == '¨' || characters[index] == '&' || characters[index] == '*' || characters[index] == '?' || characters[index] == '_'
-                || characters[index] == '-'
-            ) return true
+            if (!this.regex.test(characters[index])) return true
         }
         return false
     }
@@ -36,7 +37,7 @@ export default class Variables {
     handleNumberErrorsArray(variable: any, count: any) {
         return ({
             symbol: variable,
-            id: count,
+            line: count,
             errors: [{ error: variable, description: 'Não pode começar variável com número' }]
         })
 
@@ -47,7 +48,7 @@ export default class Variables {
     handleCharactersErrorsArray(variable: any, count: any) {
         return ({
             symbol: variable,
-            id: count,
+            line: count,
             errors: [{ error: variable, description: 'Não pode ter caracteres especiais em uma variável' }]
         })
     }
@@ -57,7 +58,7 @@ export default class Variables {
     handleSpaceErrorsArray(variable: any, count: any) {
         return ({
             symbol: variable,
-            id: count,
+            line: count,
             errors: [{ error: variable, description: 'Variáveis não podem conter espaços' }]
         })
     }
@@ -68,7 +69,7 @@ export default class Variables {
     //Caso contrário, retorna o erro adequado
     isVariable(variable: any, count: any, symbolCount: number) {
         if (!this.isSpecialCharacters(variable) && this.isText(variable) && !this.isSpace(variable)) {
-            return ({ token: 'IDENTIFICADOR [' + symbolCount + ']', symbol: variable, id: count, errors: [] })
+            return ({ token: 'IDENTIFICADOR [' + symbolCount + ']', symbol: variable, line: count, errors: [] })
         } else {
             if (this.isSpecialCharacters(variable)) {
                 return this.handleCharactersErrorsArray(variable, count);

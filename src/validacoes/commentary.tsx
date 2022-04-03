@@ -12,11 +12,11 @@ export default class Commentary {
     handleCommentary(word: string, count: number) {
         const isComentary = this.isValidCommentary(word)
         if (isComentary) {
-            return ({ token: 'COMENTÁRIO', symbol: word, id: count, errors: [] })
+            return ({ token: 'COMENTÁRIO', symbol: word, line: count, errors: [] })
         } else {
             return ({
                 symbol: word,
-                id: count,
+                line: count,
                 errors: [{ error: word, description: 'Comentário não pode começar com --' }]
             })
         }
