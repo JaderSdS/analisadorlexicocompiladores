@@ -254,17 +254,14 @@ function App() {
         <div className="container">
           <h4>Insira seu documento de texto</h4>
           <input style={{ marginBottom: '20px' }} type="file" id="file" accept='text/plain' onChange={(event) => fileReader(event)} />
-          {showTextArea &&
-            <div className="container-textarea">
-              <TextField
-                id="text"
-                multiline
-                rows={10}
-                style={{ width: '500px' }}
-              />
-            </div>
-          }
-
+          <div className="container-textarea">
+            <TextField
+              id="text"
+              multiline
+              rows={10}
+              style={{ width: '500px' }}
+            />
+          </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
             <Button
