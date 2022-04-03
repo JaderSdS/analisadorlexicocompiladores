@@ -42,6 +42,7 @@ function App() {
     reader.readAsText(input.files[0]);
   }
 
+  //ao alterar o texto direto na textarea ele adiciona na variavel que fica as linhas 
   const handleChange = (event: any) => {
     const input = event.target;
 
@@ -136,8 +137,11 @@ function App() {
         count++;
       }
     }
+    //passa todos os tokens válidos para o array de tokens
     setAllValidated(allValidated)
+    //passa todos os tokens invalidos para o array de tokens
     setAllUnvalidated(allUnvalidated)
+    //passa todos os símbolos únicos para o array de tokens
     setAllSymbols(allSymbols)
   }
 
@@ -146,7 +150,9 @@ function App() {
     let row: {}
     let rows: any[] = []
     if (allValidated && allValidated.length > 0) {
+
       allValidated.map((word: any, index: number) => {
+        //passa por todos os itens do array e monta uma linha para cada token
         row = { id: word.line, token: word.token, symbol: word.symbol }
         if (index > 0)
           rows.push(row)
@@ -157,17 +163,13 @@ function App() {
 
   //monta os dados para a tabala de invalidos
   useEffect(() => {
-    // //linhas da tabala de invalidos
-    // const invalidRows: GridRowsProp = [
-    //   { id: 1, symbol: 'simboloInvalido1', error: 'erro1' },
-    //   { id: 2, symbol: 'simboloInvalido2', error: 'erro2' },
-    //   { id: 3, symbol: 'simboloInvalido3', error: 'erro3' },
-    // ];
+
     let row: {}
     let rows: any[] = []
     if (allUnvalidated && allUnvalidated.length > 0) {
       ;
       allUnvalidated.map((word: any, index: number) => {
+        //passa por todos os itens do array e monta uma linha para cada erro
         if (index > 0) {
           row = { id: word.line, symbol: word.symbol }
           rows.push(row)
@@ -182,17 +184,12 @@ function App() {
 
   //monta os dados para a tabela de simbolos
   useEffect(() => {
-    // //linhas da tabala de simbolos
-    // const symbolsRows: GridRowsProp = [
-    //   { id: 1, symbol: 'simbolo1' },
-    //   { id: 2, symbol: 'simbolo2' },
-    //   { id: 3, symbol: 'simbolo3' },
-    // ];
     let row: {}
     let rows: any[] = []
     if (allSymbols && allSymbols.length > 0) {
       ;
       allSymbols.map((word: any, index: number) => {
+        //passa por todos os itens do array e monta uma linha para cada simbolo
         if (index > 0) {
           row = { id: index, symbol: word }
           rows.push(row)
